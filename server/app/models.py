@@ -114,5 +114,9 @@ class Collaborator(database.Model, _DeletableEntity, _PopulateMixin):
         _DeletableEntity.delete(collaborator)
 
     @classmethod
+    def find_by_id(cls, id: int) -> 'Collaborator':
+        return cls._find_first([cls.id == id])
+
+    @classmethod
     def find_all(cls) -> List['Collaborator']:
         return cls._find_all(order_clauses=[cls.created_at])
