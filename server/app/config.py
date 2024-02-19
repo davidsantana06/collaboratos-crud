@@ -1,7 +1,10 @@
 from dotenv import load_dotenv
 from flask import Blueprint, Flask
+from http import HTTPStatus
 from importlib import import_module
 from os import listdir, environ
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.wrappers import Response
 
 from .constants import DATABASE_FILE, ENV_FILE, MODULE_FOLDER, MODULES_FOLDER, MODULE_PATH
 from .extensions import database
@@ -14,6 +17,10 @@ def config_enviroment(app: Flask) -> None:
         'SQLALCHEMY_DATABASE_URI': f'sqlite:///{DATABASE_FILE}',
         'SQLALCHEMY_TRACK_MODIFICATIONS': False
     })
+    app.wsgi_app = DispatcherMiddleware(
+        Response(status=HTTPStatus.NOT_FOUND), 
+        {'/collaborators-crud/api': app.wsgi_app}
+    )
 
 
 def config_extensions(app: Flask) -> None:
