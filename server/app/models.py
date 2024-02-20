@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from flask_sqlalchemy.model import Model
 from flask_wtf import FlaskForm
@@ -94,11 +95,12 @@ class _PopulateMixin:
 
 # MODELS #
 
+@dataclass
 class Collaborator(database.Model, _DeletableEntity, _PopulateMixin):
-    id = Column(Integer(), autoincrement=True, unique=True, nullable=False, primary_key=True)
-    first_name = Column(String(30), nullable=False)
-    last_name = Column(String(30), nullable=False)
-    participation = Column(Float(1), nullable=False)
+    id: int = Column(Integer(), autoincrement=True, unique=True, nullable=False, primary_key=True)
+    first_name: str = Column(String(30), nullable=False)
+    last_name: str = Column(String(30), nullable=False)
+    participation: float = Column(Float(1), nullable=False)
 
     def __init__(self, first_name: str, last_name: str, participation: float) -> None:
         self.first_name = first_name
