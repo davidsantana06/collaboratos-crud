@@ -1,4 +1,4 @@
-from flask import request
+from flask import jsonify, request
 from http import HTTPStatus
 
 from . import collaborator
@@ -13,7 +13,7 @@ def get():
 
 @collaborator.post('/')
 def create():
-    form = CreateForm(request.form)
+    form = CreateForm(request.form, meta={'csrf': False})
     message, category = 'Os dados do formulário são inválidos!', 'danger'
     status_code = HTTPStatus.BAD_REQUEST
     
