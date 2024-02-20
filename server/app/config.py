@@ -7,7 +7,7 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
 
 from .constants import DATABASE_FILE, ENV_FILE, MODULE_FOLDER, MODULES_FOLDER, MODULE_PATH
-from .extensions import database
+from .extensions import cors, database
 
 
 def config_enviroment(app: Flask) -> None:
@@ -24,6 +24,8 @@ def config_enviroment(app: Flask) -> None:
 
 
 def config_extensions(app: Flask) -> None:
+    cors.init_app(app, origins='*')
+
     database.init_app(app)
     with app.app_context():
         import_module('app.models')
