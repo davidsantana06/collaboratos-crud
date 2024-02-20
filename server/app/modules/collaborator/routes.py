@@ -2,12 +2,8 @@ from flask import request
 from http import HTTPStatus
 
 from . import collaborator
-from .forms import CreateForm
-from .services import (
-    validate_collaborator_participation,
-    find_all_collaboratos, find_collaborator_by_id,
-    create_collaborator, delete_collaborator
-)
+from .forms import *
+from .services import *
 
 
 @collaborator.get('/')
@@ -26,7 +22,7 @@ def create():
         last_name = form.last_name.data
         participation = form.participation.data
 
-        if not validate_collaborator_participation(participation):
+        if not validate_participation(participation):
             message = 'A taxa de participação excede o limite!'
             status_code = HTTPStatus.UNPROCESSABLE_ENTITY
         else:

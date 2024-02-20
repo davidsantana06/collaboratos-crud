@@ -2,7 +2,7 @@ from typing import List
 from app.models import Collaborator
 
 
-def validate_collaborator_participation(participation: float) -> bool:
+def validate_participation(participation: float) -> bool:
     return participation <= 100 - sum(c.participation for c in Collaborator.find_all())
 
 
