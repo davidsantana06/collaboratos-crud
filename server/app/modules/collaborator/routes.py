@@ -36,11 +36,12 @@ def create():
 @collaborator.delete('/<int:collaborator_id>')
 def delete(collaborator_id: int):
     collaborator = find_collaborator_by_id(collaborator_id)
-    message, category = 'O colaborador foi deletado!', 'success'
+    message, category = 'O colaborador não foi encontrado.', 'info'
     status_code = HTTPStatus.NOT_FOUND
 
     if collaborator is not None:
         delete_collaborator(collaborator)
+        message, category = 'O colaborador foi deletado!', 'success'
         status_code = HTTPStatus.OK
 
     return {'message': message, 'category': category}, status_code
