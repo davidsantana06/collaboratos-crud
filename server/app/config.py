@@ -8,6 +8,7 @@ from werkzeug.wrappers import Response
 
 from .constants import DATABASE_FILE, ENV_FILE, MODULE_FOLDER, MODULES_FOLDER, MODULE_PATH
 from .extensions import cors, database
+from .models import Collaborator
 
 
 def config_enviroment(app: Flask) -> None:
@@ -30,6 +31,12 @@ def config_extensions(app: Flask) -> None:
     with app.app_context():
         import_module('app.models')
         database.create_all()
+
+        if not Collaborator.find_all():
+            collaborator_1 = Collaborator('David', 'Santana', 5)
+            collaborator_2 = Collaborator('Giovana', 'Silva', 5)
+            Collaborator.save(collaborator_1)
+            Collaborator.save(collaborator_2)
 
 
 def config_modules(app: Flask) -> None:
