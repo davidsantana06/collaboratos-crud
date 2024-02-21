@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <main class="container py-4" x-data="{ collaborators: getCollaborators() }">
+    <main class="container py-4" x-data="{ collaborators: prepareData() }">
         <div class="d-flex justify-content-center">
             <img class="cotabox-logo mb-3" src="./assets/cotabox.png">
         </div>
@@ -70,29 +70,47 @@
     <script>
         const API_URL = 'http://127.0.0.1:5000/collaborators-crud/api/collaborator/';
 
+        const form = document.querySelector('form');
+
+        const chartCanvas = document.getElementById('doughnutChart');
+        const chartContext = chartCanvas.getContext('2d');
+        let chart = null;
+
+        const tbody = document.querySelector('table tbody');
+
+
         const getCollaborators = async () => {
             const response = await fetch(API_URL);
             const data = await response.json();
             return data.collaborators;
         }
 
+
         const createCollaborator = async () => {
             const response = await fetch(API_URL, {
                 method: 'POST',
-                body: new FormData(document.querySelector('form'))
+                body: new FormData(form)
             })
             const data = await response.json();
+
+            if (response.ok) {
+                const first_name = document.getElementById('first-name').value;
+                const last_name = document.getElementById('last-name').value;
+                const participation = document.getElementById('participation').value;
+                updateChart(first_name, last_name, participation);
+                updateTable(first_name, last_name, participation);
+                form.reset();
+            }
+
             showMessage(data.message, data.category);
         }
 
-        const createDoughnutChart = (collaborators) => {
+
+        const createChart = (collaborators) => {
             const labels = collaborators.map(collaborator => collaborator.first_name + ' ' + collaborator.last_name);
             const data = collaborators.map(collaborator => collaborator.participation);
 
-            const doughnutChartCanvas = document.getElementById('doughnutChart');
-            const doughnutChartContext = doughnutChartCanvas.getContext('2d');
-
-            new Chart(doughnutChartContext, {
+            chart = new Chart(chartContext, {
                 type: 'doughnut',
                 data: {
                     labels: labels,
@@ -115,10 +133,26 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', async () => {
+
+        const updateChart = (first_name, last_name, participation) => {
+            chart.data.labels.push(first_name + ' ' + last_name);
+            chart.data.datasets[0].data.push(participation);
+            chart.update();
+        }
+
+
+        const updateTable = (first_name, last_name, participation) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${first_name}</td><td>${last_name}</td><td>${participation}</td>`;
+            tbody.appendChild(tr);
+        }
+
+
+        const prepareData = async () => {
             const collaborators = await getCollaborators();
-            createDoughnutChart(collaborators);
-        });
+            createChart(collaborators);
+            return collaborators;
+        }
     </script>
 </body>
 
