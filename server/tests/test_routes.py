@@ -1,7 +1,7 @@
 from flask.testing import FlaskClient
 from http import HTTPStatus
-from werkzeug.test import TestResponse
 from typing import Dict, Tuple
+from werkzeug.test import TestResponse
 import json
 
 from . import *
@@ -24,7 +24,7 @@ def test_get_collaborators(client: FlaskClient) -> None:
 
 def test_create_collaborator_valid_input(client: FlaskClient) -> None:
     data, status_code = dictionaryize_response_data(
-        client.post(URL, data=create_collaborator_data('Invalid', 'Input', 1))
+        client.post(URL, data=create_collaborator_data('Valid', 'Input', 1))
     )
 
     assert status_code == HTTPStatus.CREATED

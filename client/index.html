@@ -71,12 +71,11 @@
         const API_URL = 'http://127.0.0.1:5000/collaborators-crud/api/collaborator/';
 
         const form = document.querySelector('form');
+        const tbody = document.querySelector('table tbody');
 
         const chartCanvas = document.getElementById('doughnutChart');
         const chartContext = chartCanvas.getContext('2d');
         let chart = null;
-
-        const tbody = document.querySelector('table tbody');
 
 
         const getCollaborators = async () => {

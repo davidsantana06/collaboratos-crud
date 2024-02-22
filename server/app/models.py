@@ -13,7 +13,7 @@ from typing import List
 from .extensions import database
 
 
-# BASES/MIXINS #
+# BASES #
 
 class _Entity(Model):
     @declared_attr
@@ -79,6 +79,8 @@ class _DeletableEntity(_Entity):
     def _find_all(cls, filter_clauses: List[ColumnElement[bool]] = [], group_clauses: List[UnaryExpression] = [], order_clauses: List[UnaryExpression] = []) -> List['_DeletableEntity']:
         return super()._find_all([*filter_clauses, cls.status == 1], group_clauses, order_clauses)
 
+
+# MIXINS #
 
 class _PopulateMixin:
     def populate_form(self, form: FlaskForm) -> None:
